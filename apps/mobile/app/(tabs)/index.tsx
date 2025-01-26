@@ -1,74 +1,94 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { ParallaxScrollView } from "@/components/parallax-scroll-view";
+import { Tile } from "@/components/ui/tile";
+import { H1 } from "@/components/ui/typography";
+import { useAuth } from "@/features/auth/hooks";
+import { useDoubleNavigate } from "@/features/routing/hooks";
+import { tailwind } from "@/util/tailwind";
+import {
+  FontAwesome5,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import { View } from "react-native";
 
 export default function HomeScreen() {
+  const auth = useAuth();
+  const doubleNavigate = useDoubleNavigate();
+  const [daithiPresses, setDaithiPresses] = useState(0);
+
+  useEffect(() => {
+    if (daithiPresses >= 5) {
+      auth.logOut();
+    }
+  }, [daithiPresses]);
+
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={tailwind.theme.colors.green[200]}
       headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+        <FontAwesome5
+          name="baby"
+          size={310}
+          className="absolute top-16 left-4 text-green-800"
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
+      }
+    >
+      <H1
+        onPress={() => {
+          setDaithiPresses((presses) => presses + 1);
+        }}
+      >
+        Daithí
+      </H1>
+
+      <View className="flex-row flex-wrap gap-8">
+        <Tile
+          onPress={() => {
+            doubleNavigate({ to: "/feeds/active", via: "/feeds" });
+          }}
+          icon={(props) => (
+            <MaterialCommunityIcons name="baby-bottle" {...props} />
+          )}
+          colors={{
+            bg: tailwind.theme.colors.yellow[200],
+            text: tailwind.theme.colors.yellow[800],
+          }}
+        >
+          Start Feeding
+        </Tile>
+
+        <Tile
+          onPress={() => {
+            doubleNavigate({
+              to: "/nappies/add",
+              via: "/nappies",
+            });
+          }}
+          icon={(props) => (
+            <MaterialIcons name="baby-changing-station" {...props} />
+          )}
+          colors={{
+            bg: tailwind.theme.colors.orange[200],
+            text: tailwind.theme.colors.orange[800],
+          }}
+        >
+          Log Nappy
+        </Tile>
+
+        <Tile
+          onPress={() => {
+            doubleNavigate({ to: "/pumps/active", via: "/pumps" });
+          }}
+          icon={(props) => <FontAwesome5 name="gas-pump" {...props} />}
+          colors={{
+            bg: tailwind.theme.colors.indigo[200],
+            text: tailwind.theme.colors.indigo[800],
+          }}
+        >
+          Start Pumping
+        </Tile>
+      </View>
     </ParallaxScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
