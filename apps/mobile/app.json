@@ -1,17 +1,18 @@
 {
   "expo": {
-    "name": "Daithí",
+    "name": "Daithi",
     "slug": "daithi",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "daithi",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "app.daithi",
+      "bundleIdentifier": "app.daithi.temp",
       "infoPlist": {
+        "CFBundleDisplayName": "Daithí",
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
         }
@@ -22,7 +23,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "app.daithi"
+      "package": "app.daithi.temp"
     },
     "web": {
       "bundler": "metro",
