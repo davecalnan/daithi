@@ -55,9 +55,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (hasLoggedIn) {
       setAccessToken(authState.data!.token);
-    } else {
-      hideSplashScreen();
     }
+
+    hideSplashScreen();
   }, [authState.status]);
 
   useProtectedRoute(authState.data?.token, status === "pending");
