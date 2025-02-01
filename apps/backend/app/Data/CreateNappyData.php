@@ -14,6 +14,6 @@ class CreateNappyData extends Data
         public DateTime|Optional $changed_at,
         public bool $is_wet,
         public bool $is_dirty,
-        public ?string $notes,
+        public string|null|Optional $notes,
     ) {}
 }

@@ -8,12 +8,12 @@ class Data extends BaseData
 {
     public function validated()
     {
-        return collect(static::getValidationRules([]))
-            ->mapWithKeys(function ($rule, $ruleKey) {
-                $key = str($ruleKey)->explode('.')->first();
+        $array = $this->toArray();
 
-                return [$key => $this->$key];
-            })
+        return collect(static::getValidationRules([]))
+            ->map(fn (mixed $rule, string $ruleKey) => str($ruleKey)->explode('.')->first())
+            ->filter(fn (string $key) => array_key_exists($key, $array))
+            ->mapWithKeys(fn (string $key) => [$key => $array[$key] ?? null])
             ->all();
     }
 }

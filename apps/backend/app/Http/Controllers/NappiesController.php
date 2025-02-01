@@ -6,7 +6,6 @@ use App\Data\CreateNappyData;
 use App\Data\NappyData;
 use App\Models\Nappy;
 use Illuminate\Http\Request;
-use Spatie\LaravelData\Optional;
 
 class NappiesController extends Controller
 {
@@ -23,9 +22,7 @@ class NappiesController extends Controller
     {
         $attributes = $data->validated();
 
-        if ($attributes['changed_at'] instanceof Optional) {
-            $attributes['changed_at'] = now();
-        }
+        $attributes['changed_at'] ??= now();
 
         return NappyData::from(
             Nappy::create($attributes)
