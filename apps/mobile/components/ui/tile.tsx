@@ -1,4 +1,5 @@
 import { Link, LinkProps } from "expo-router";
+import * as React from "react";
 import {
   Text,
   TouchableOpacity,
@@ -15,14 +16,16 @@ export type TileProps = {
   children: React.ReactNode;
 };
 
-function TileImplementation({
-  icon: Icon,
-  colors,
-  children,
-  ...props
-}: TileProps & TouchableOpacityProps) {
+const TileImplementation = React.forwardRef<
+  React.ElementRef<typeof TouchableOpacity>,
+  TileProps & TouchableOpacityProps
+>(function Tile(
+  { icon: Icon, colors, children, ...props }: TileProps & TouchableOpacityProps,
+  ref
+) {
   return (
     <TouchableOpacity
+      ref={ref}
       className="p-4 w-36 h-36 rounded-lg gap-2"
       activeOpacity={0.7}
       {...props}
@@ -39,7 +42,7 @@ function TileImplementation({
       </Text>
     </TouchableOpacity>
   );
-}
+});
 
 function TileLink({ href, ...props }: Pick<LinkProps, "href"> & TileProps) {
   return (
