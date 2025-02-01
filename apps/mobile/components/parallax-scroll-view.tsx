@@ -1,25 +1,33 @@
-import type { PropsWithChildren, ReactElement } from "react";
+import { useState, type PropsWithChildren, type ReactElement } from "react";
 import Animated, {
   interpolate,
   useAnimatedRef,
   useAnimatedStyle,
   useScrollViewOffset,
 } from "react-native-reanimated";
-import { View } from "react-native";
+import {
+  ActivityIndicator,
+  RefreshControl,
+  SafeAreaView,
+  View,
+} from "react-native";
 import { useBottomTabOverflow } from "@/components/ui/tab-bar-background";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const HEADER_HEIGHT = 250;
 
-type Props = PropsWithChildren<{
+export type ParallaxScrollViewProps = PropsWithChildren<{
+  onRefresh?: () => Promise<void>;
   headerImage: ReactElement;
   headerBackgroundColor: string;
 }>;
 
 export function ParallaxScrollView({
+  onRefresh,
   children,
   headerImage,
   headerBackgroundColor,
-}: Props) {
+}: ParallaxScrollViewProps) {
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
   const bottom = useBottomTabOverflow();
@@ -44,6 +52,9 @@ export function ParallaxScrollView({
     };
   });
 
+  const insets = useSafeAreaInsets();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   return (
     <View className="flex-1">
       <Animated.ScrollView
@@ -51,6 +62,18 @@ export function ParallaxScrollView({
         scrollEventThrottle={16}
         scrollIndicatorInsets={{ bottom }}
         contentContainerStyle={{ paddingBottom: bottom }}
+        refreshControl={
+          onRefresh ? (
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={async () => {
+                setIsRefreshing(true);
+                await onRefresh();
+                setIsRefreshing(false);
+              }}
+            />
+          ) : undefined
+        }
       >
         <Animated.View
           className="overflow-hidden"
@@ -65,6 +88,15 @@ export function ParallaxScrollView({
           {children}
         </View>
       </Animated.ScrollView>
+
+      {isRefreshing && (
+        <View
+          className="absolute flex-row justify-center top-0 inset-x-0"
+          style={{ paddingTop: insets.top }}
+        >
+          <ActivityIndicator size="large" className="mt-0.5" />
+        </View>
+      )}
     </View>
   );
 }

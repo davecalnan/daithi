@@ -32,6 +32,9 @@ export default function Nappies() {
           className="absolute top-10 color-orange-800"
         />
       }
+      onRefresh={async () => {
+        await nappies.refetch();
+      }}
     >
       <H1>Nappies</H1>
 
