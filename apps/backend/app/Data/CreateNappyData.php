@@ -11,7 +11,7 @@ class CreateNappyData extends Data
 {
     public function __construct(
         #[WithCast(DateTimeInterfaceCast::class)]
-        public DateTime|Optional $changed_at,
+        public DateTime|null|Optional $changed_at,
         public bool $is_wet,
         public bool $is_dirty,
         public string|null|Optional $notes,
