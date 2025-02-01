@@ -5,7 +5,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { H1 } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { useId, useState } from "react";
-import { View } from "react-native";
+import {
+  InputAccessoryView,
+  Keyboard,
+  KeyboardAvoidingView,
+  View,
+  Button as RNButton,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { isToday } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
@@ -17,19 +24,14 @@ export default function LogNappy() {
   const router = useRouter();
 
   const [changedAt, setChangedAt] = useState(new Date());
-
   const [isWet, setIsWet] = useState(false);
-  const isWetLabelId = useId();
-
   const [isDirty, setIsDirty] = useState(false);
-  const isDirtyLabelId = useId();
-
   const [notes, setNotes] = useState("");
-  const notesLabelId = useId();
 
-  function goBack() {
-    router.replace({ pathname: "/nappies", params: {} });
-  }
+  const isWetLabelId = useId();
+  const isDirtyLabelId = useId();
+  const notesLabelId = useId();
+  const inputAccessoryViewID = useId();
 
   async function handleSubmit() {
     const payload = {
@@ -52,45 +54,53 @@ export default function LogNappy() {
 
   return (
     <SafeAreaView className="p-8 flex-1 justify-between bg-gray-100">
-      <View className="flex-1">
-        <H1>Log a Nappy</H1>
-        <View className="mt-4 gap-12">
-          <DateTimeField value={changedAt} onChange={setChangedAt} />
-          <View className="flex-row items-center">
-            <View className="flex-1 flex-row items-center gap-3">
-              <Checkbox
-                checked={isWet}
-                onCheckedChange={setIsWet}
-                aria-labelledby={isWetLabelId}
-              />
-              <Label nativeID={isWetLabelId} onPress={() => setIsWet(!isWet)}>
-                Wet
-              </Label>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View className="flex-1">
+          <H1>Log a Nappy</H1>
+          <View className="mt-4 gap-12">
+            <DateTimeField value={changedAt} onChange={setChangedAt} />
+            <View className="flex-row items-center">
+              <View className="flex-1 flex-row items-center gap-3">
+                <Checkbox
+                  checked={isWet}
+                  onCheckedChange={setIsWet}
+                  aria-labelledby={isWetLabelId}
+                />
+                <Label nativeID={isWetLabelId} onPress={() => setIsWet(!isWet)}>
+                  Wet
+                </Label>
+              </View>
+              <View className="flex-1 flex-row items-center gap-2">
+                <Checkbox
+                  checked={isDirty}
+                  onCheckedChange={setIsDirty}
+                  aria-labelledby={isDirtyLabelId}
+                />
+                <Label
+                  nativeID={isDirtyLabelId}
+                  onPress={() => setIsDirty(!isDirty)}
+                >
+                  Dirty
+                </Label>
+              </View>
             </View>
-            <View className="flex-1 flex-row items-center gap-2">
-              <Checkbox
-                checked={isDirty}
-                onCheckedChange={setIsDirty}
-                aria-labelledby={isDirtyLabelId}
+            <View>
+              <Label nativeID={notesLabelId}>Notes</Label>
+              <Textarea
+                value={notes}
+                onChangeText={setNotes}
+                aria-labelledby={notesLabelId}
+                inputAccessoryViewID={inputAccessoryViewID}
               />
-              <Label
-                nativeID={isDirtyLabelId}
-                onPress={() => setIsDirty(!isDirty)}
-              >
-                Dirty
-              </Label>
+              <InputAccessoryView nativeID={inputAccessoryViewID}>
+                <View className="flex-row justify-end pr-4 pb-1">
+                  <RNButton onPress={() => Keyboard.dismiss()} title="Done" />
+                </View>
+              </InputAccessoryView>
             </View>
-          </View>
-          <View>
-            <Label nativeID={notesLabelId}>Notes</Label>
-            <Textarea
-              value={notes}
-              onChangeText={setNotes}
-              aria-labelledby={notesLabelId}
-            />
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
 
       <View className="flex-shrink-0 gap-3 mb-16">
         <Button variant="outline" onPress={() => router.back()}>

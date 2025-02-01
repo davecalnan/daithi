@@ -19,7 +19,7 @@ export default function Nappies() {
         .get("nappies", {
           per_page: 5,
         })
-        .then(({ data }) => data),
+        .then(({ data }) => data ?? null),
   });
 
   return (
