@@ -6,6 +6,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::withoutMiddleware('auth:sanctum')
     ->group(function () {
+        Route::get('/', function () {
+            return response()->json(
+                data: 'Daithí API',
+                options: JSON_UNESCAPED_UNICODE
+            );
+        });
+
         Route::post('login', LoginController::class);
     });
 
