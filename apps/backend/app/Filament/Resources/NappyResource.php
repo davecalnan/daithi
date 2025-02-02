@@ -20,7 +20,7 @@ class NappyResource extends Resource
 {
     protected static ?string $model = Nappy::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'icon-baby-changing-station';
 
     public static function form(Form $form): Form
     {
