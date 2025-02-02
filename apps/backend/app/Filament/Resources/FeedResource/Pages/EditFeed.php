@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\NappyResource\Pages;
+namespace App\Filament\Resources\FeedResource\Pages;
 
-use App\Filament\Resources\NappyResource;
+use App\Filament\Resources\FeedResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditNappy extends EditRecord
+class EditFeed extends EditRecord
 {
-    protected static string $resource = NappyResource::class;
+    protected static string $resource = FeedResource::class;
 
     protected function getHeaderActions(): array
     {

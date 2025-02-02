@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Data\CreateNappyData;
 use App\Data\NappyData;
 use App\Models\Nappy;
-use Illuminate\Http\Request;
 
 class NappiesController extends Controller
 {
@@ -27,20 +26,5 @@ class NappiesController extends Controller
         return NappyData::from(
             Nappy::create($attributes)
         );
-    }
-
-    public function show(Nappy $nappy)
-    {
-        //
-    }
-
-    public function update(Request $request, Nappy $nappy)
-    {
-        //
-    }
-
-    public function destroy(Nappy $nappy)
-    {
-        //
     }
 }
